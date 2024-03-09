@@ -6,14 +6,3 @@ body {
     margin: 0;
     padding: 0;
 }
-
-#large-hyderite {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    font-family: "IBM Plex Sans", sans-serif;
-    font-size: 10px;
-    font-weight: bold;
-    transition: font-size .75s, transform .75s;
-}
