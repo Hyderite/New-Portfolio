@@ -14,7 +14,6 @@ body {
 }
 
 #hyderite {
-    padding-left: 16px;
     transition: color .8s;
     cursor: text;
 }
