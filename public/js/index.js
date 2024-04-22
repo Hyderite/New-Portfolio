@@ -1,3 +1,5 @@
+// page animation
+
 document.querySelector("#large-hyderite").style.display = "flex";
 setTimeout(function () {
     if (window.matchMedia("(max-width: 480px)").matches) {
@@ -17,3 +19,7 @@ setTimeout(function () {
     }, 1000);
 
 }, 10);
+
+// typing animation
+
+

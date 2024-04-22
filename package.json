@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "express": "^4.18.3",
-    "typed.js": "^2.1.0"
+    "typed.js": "^2.1.0",
+    "typewriter-effect": "^2.21.0"
   }
 }
