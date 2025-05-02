@@ -1,19 +1,23 @@
-body {
-    background-color: #1C2333;
+.code {
+    font-family:'Consolas', sans-serif;
 }
 
-#large-hyderite {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    height: 100%;
-    font-family: "IBM Plex Sans", sans-serif;
-    font-size: 10px;
-    font-weight: bold;
-    transition: font-size .75s, transform .75s;
+@keyframes text-cursor {
+    0% {
+        border-right: 1.5px #000 solid;
+    }
+    50% {
+        border-right: 1.5px transparent solid;
+    }
+    100% {
+        border-right: 1.5px #000 solid;
+    }
 }
 
-#hyderite {
-    transition: color .8s;
-    cursor: text;
+#hello-world {
+    position: absolute;
+    margin-left: 5px;
+    height: 20px;
+    border-right: 1.5px #000 solid;
+    animation: text-cursor 1s infinite step-end;
 }

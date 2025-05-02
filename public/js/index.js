@@ -1,19 +1,20 @@
-document.querySelector("#large-hyderite").style.display = "flex";
-setTimeout(function () {
-    if (window.matchMedia("(max-width: 480px)").matches) {
-        document.querySelector("#large-hyderite").style.fontSize = "9.259vw";
+var i = 0;
+var txt = "Hello world!";
+var speed = 50;
+function helloWorld() {
+    if (i < txt.length) {
+        document.querySelector("#hello-world").style.animation = "none";
+        document.querySelector("#hello-world").innerHTML += txt.charAt(i);
+        i++;
+        setTimeout(helloWorld, speed);
     } else {
-        document.querySelector("#large-hyderite").style.fontSize = "4vw";
-    };
-    setTimeout(function () {
-        document.querySelector("#hyderite").style.color = "#c30000";
+        document.querySelector("#hello-world").style.animation = "text-cursor 1s infinite step-end";
         setTimeout(function () {
-            if (window.matchMedia("(max-width: 480px)").matches) {
-                document.querySelector("#large-hyderite").style.transform = "translate(calc(-50% + (65vw / 2 - 3vw)), calc(-50% + 2.315vw + 20px)) scale(0.65)";
-            } else {
-                document.querySelector("#large-hyderite").style.transform = "translate(calc(-50% + (22.722vw / 2 - 5vw)), calc(-50% + 2.315vw)) scale(0.3)";
-            };
-        }, 1000);
-    }, 1000);
+            document.querySelector("#tip-box").style.opacity = "1";
+        }, 2000);
+    }
+};
 
-}, 10);
+setTimeout(function () {
+    helloWorld();
+}, 2500);
