@@ -1,4 +1,4 @@
-/.vscode
+.vscode
 .vercel
 .env*.local
-/test.html
+test.html

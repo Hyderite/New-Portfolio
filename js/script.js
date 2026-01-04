@@ -13,7 +13,14 @@ function setHeight() {
 
 function smoothScroll() {
     targetY = window.scrollY;
-    currentY += (targetY - currentY) * ease;
+    const diff = targetY - currentY;
+    currentY += (diff) * ease;
+
+    if (Math.abs(diff) < 0.001) {
+        currentY = targetY;
+    } else {
+        currentY += diff * ease;
+    };
 
     if (content) {
         content.style.transform = `translate3d(0, ${-currentY}px, 0)`;
