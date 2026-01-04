@@ -1,0 +1,28 @@
+@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Lexend:wght@100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    font-family: "Lexend", "UoqMunThenKhung", sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+.viewport {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+}
+
+main {
+    will-change: transform;
+    backface-visibility: hidden;
+}
+
+h1, h2, .title {
+    font-family: "Work Sans", "UoqMunThenKhung", sans-serif;
+    font-weight: 800;
+}
+
+#logo {
+    width: 1000px;
+    height: 1000px;
+}
