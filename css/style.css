@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Dela+Gothic+One&family=Lexend:wght@100..900&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@100..900&family=UoqMunThenKhung&family=Work+Sans:ital,wght@0,100..900;1,100..900&display=swap');
 
 body {
     font-family: "Lexend", "UoqMunThenKhung", sans-serif;
@@ -25,4 +25,7 @@ h1, h2, .title {
 #logo {
     width: 1000px;
     height: 1000px;
+    fill: #212121;
 }
+
+#test {color: #000};
