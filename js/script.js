@@ -1,6 +1,8 @@
+// lerp scrolling mechanism
+
 let currentY = 0;
 let targetY = 0;
-const ease = 0.07;
+const ease = 0.125;
 
 const minScrollSpeed = 2;
 const maxScrollSpeed = 35;
