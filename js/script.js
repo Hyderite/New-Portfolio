@@ -116,49 +116,63 @@ window.addEventListener('mousemove', (e) => {
 
 function update() {
     let anyHovered = false;
+    const navHovered = nav.matches(":hover");
+
+    let closestLink = currentTargetLink;
+    let minDistance = Infinity;
+
+    if (navHovered) {
+        links.forEach((link) => {
+            const rect = link.getBoundingClientRect();
+            const centerX = rect.left + rect.width / 2;
+            const centerY = rect.top + rect.height / 2;
+            const distance = Math.hypot(mouse.x - centerX, mouse.y - centerY);
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestLink = link;
+            };
+        });
+        currentTargetLink = closestLink;
+    };
 
     links.forEach((link, index) => {
         const rect = link.getBoundingClientRect();
-        const isHovered = mouse.x > rect.left && mouse.x < rect.right &&
-            mouse.y > rect.top && mouse.y < rect.bottom;
+
+        const isDirectlyHovered = mouse.x > rect.left && mouse.x < rect.right && mouse.y > rect.top && mouse.y < rect.bottom;
 
         const centerX = rect.left + rect.width / 2;
         const centerY = rect.top + rect.height / 2;
         let textTargetX = 0, textTargetY = 0;
 
-        if (isHovered) {
+        if (isDirectlyHovered) {
             anyHovered = true;
-            currentTargetLink = link;
             const deltaX = (mouse.x - centerX);
             const deltaY = (mouse.y - centerY);
-
             textTargetX = deltaX * 0.12;
             textTargetY = deltaY * 0.12;
-
-            target.x = rect.left + (deltaX * 0.15);
-            target.y = rect.top + (deltaY * 0.15);
-            target.w = rect.width;
-            target.h = rect.height;
-            target.opacity = 1;
         };
 
         linkOffsets[index].x += (textTargetX - linkOffsets[index].x) * 0.15;
         linkOffsets[index].y += (textTargetY - linkOffsets[index].y) * 0.15;
-
-        if (Math.abs(linkOffsets[index].x) < 0.01) linkOffsets[index].x = 0;
-        if (Math.abs(linkOffsets[index].y) < 0.01) linkOffsets[index].y = 0;
-
         link.style.transform = `translate3d(${linkOffsets[index].x}px, ${linkOffsets[index].y}px, 0)`;
     });
 
-    if (!anyHovered) {
-        target.opacity = 0;
-        const lastRect = currentTargetLink.getBoundingClientRect();
-        target.x = lastRect.left;
-        target.y = lastRect.top;
-        target.w = lastRect.width;
-        target.h = lastRect.height;
-    };
+    const targetRect = currentTargetLink.getBoundingClientRect();
+    target.opacity = navHovered ? 1 : 0;
+    
+    if (navHovered) {
+        const deltaX = (mouse.x - (targetRect.left + targetRect.width / 2));
+        const deltaY = (mouse.y - (targetRect.top + targetRect.height / 2));
+        target.x = targetRect.left + (deltaX * 0.15);
+        target.y = targetRect.top + (deltaY * 0.15);
+    } else {
+        target.x = targetRect.left;
+        target.y = targetRect.top;
+    }
+    
+    target.w = targetRect.width;
+    target.h = targetRect.height;
 
     const snapSpeed = 0.2;
     current.x += (target.x - current.x) * snapSpeed;
@@ -169,15 +183,12 @@ function update() {
     const oSpeed = target.opacity === 1 ? 0.7 : 0.15;
     current.opacity += (target.opacity - current.opacity) * oSpeed;
 
-    if (current.opacity < 0.001) current.opacity = 0;
-    if (current.opacity > 0.999) current.opacity = 1;
-
     indicator.style.opacity = current.opacity;
     indicator.style.width = `${current.w}px`;
     indicator.style.height = `${current.h}px`;
     indicator.style.transform = `translate3d(${current.x}px, ${current.y}px, 0)`;
 
     requestAnimationFrame(update);
-}
+};
 
 update();
