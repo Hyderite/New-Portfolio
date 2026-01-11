@@ -67,6 +67,8 @@ nav ul li a {
     padding: 5px 10px;
     z-index: 3;
     will-change: transform;
+    text-transform: uppercase;
+    letter-spacing: 0.005rem;
 }
 
 nav div {
