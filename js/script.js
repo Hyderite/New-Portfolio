@@ -2,7 +2,11 @@
 
 let currentY = 0;
 let targetY = 0;
-const ease = 0.07;
+if (!window.matchMedia('(pointer: coarse)').matches) {
+    const ease = 0.07;
+} else {
+    const ease = 0.1;
+};
 
 const minScrollSpeed = 2;
 const maxScrollSpeed = 35;
@@ -108,9 +112,11 @@ window.addEventListener('load', () => {
     logo.classList.add('animate');
 });
 
-logoLink.addEventListener('mouseenter', () => {
-    logoAnimation();
-});
+if (!window.matchMedia('(pointer: coarse)').matches) {
+    logoLink.addEventListener('mouseenter', () => {
+        logoAnimation();
+    });
+};
 
 // navbar link hover effect
 
@@ -124,7 +130,6 @@ let current = { x: 0, y: 0, w: 0, h: 0, opacity: 0 };
 const linkOffsets = Array.from(links).map(() => ({ x: 0, y: 0 }));
 let currentTargetLink = links[0];
 
-// Init
 const initRect = links[0].getBoundingClientRect();
 current.x = target.x = initRect.left;
 current.y = target.y = initRect.bottom;
@@ -191,7 +196,7 @@ function update() {
     } else {
         target.x = targetRect.left;
         target.y = targetRect.top;
-    }
+    };
 
     target.w = targetRect.width;
     target.h = targetRect.height;
