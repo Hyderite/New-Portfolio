@@ -3,9 +3,9 @@
 let currentY = 0;
 let targetY = 0;
 if (!window.matchMedia('(pointer: coarse)').matches) {
-    const ease = 0.07;
+    ease = 0.07;
 } else {
-    const ease = 0.1;
+    ease = 0.1;
 };
 
 const minScrollSpeed = 2;
