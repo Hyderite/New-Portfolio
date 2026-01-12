@@ -104,8 +104,8 @@ function logoAnimation() {
     setTimeout(function () {
         logo.style.opacity = "1";
         logo.classList.remove('animate');
-    }, 100);
-    setTimeout(function () { logo.classList.add('animate') }, 150);
+    }, 50);
+    setTimeout(function () { logo.classList.add('animate') }, 70);
 };
 
 window.addEventListener('load', () => {
