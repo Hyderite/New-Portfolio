@@ -90,4 +90,32 @@ nav div {
     width: 45px;
     aspect-ratio: 1;
     fill: var(--text-color);
+    transition: opacity 0.3s ease;
+}
+
+.st0, .st2, .st3 {
+    opacity: 0;
+    stroke-dasharray: 650;
+    stroke-dashoffset: 650;
+}
+
+.animate .st0, .animate .st2, .animate .st3 {
+    opacity: 1;
+    animation: logo-animation 0.8s cubic-bezier(0.66, 0, 0.34, 1) forwards;
+}
+
+.animate .st6 .st2 { animation-delay: 0s; }
+.animate .st4 .st3 { animation-delay: 0.1s; }
+.animate .st7 .st2 { animation-delay: 0.2s; }
+.animate .st5 .st0 { animation-delay: 0.3s; }
+
+@keyframes logo-animation {
+    from {
+        stroke-dashoffset: 650;
+        opacity: 0;
+    }
+    to {
+        stroke-dashoffset: 0;
+        opacity: 1;
+    }
 }

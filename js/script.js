@@ -90,6 +90,28 @@ if (document.readyState === 'complete') {
     syncScrollPosition();
 };
 
+// logo animation
+
+const logo = document.querySelector('#logo');
+const logoLink = document.querySelector('nav > a');
+
+function logoAnimation() {
+    logo.style.opacity = "0";
+    setTimeout(function () {
+        logo.style.opacity = "1";
+        logo.classList.remove('animate');
+    }, 100);
+    setTimeout(function () { logo.classList.add('animate') }, 150);
+};
+
+window.addEventListener('load', () => {
+    logo.classList.add('animate');
+});
+
+logoLink.addEventListener('mouseenter', () => {
+    logoAnimation();
+});
+
 // navbar link hover effect
 
 const nav = document.querySelector('nav ul');
@@ -160,7 +182,7 @@ function update() {
 
     const targetRect = currentTargetLink.getBoundingClientRect();
     target.opacity = navHovered ? 1 : 0;
-    
+
     if (navHovered) {
         const deltaX = (mouse.x - (targetRect.left + targetRect.width / 2));
         const deltaY = (mouse.y - (targetRect.top + targetRect.height / 2));
@@ -170,7 +192,7 @@ function update() {
         target.x = targetRect.left;
         target.y = targetRect.top;
     }
-    
+
     target.w = targetRect.width;
     target.h = targetRect.height;
 
