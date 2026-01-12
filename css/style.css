@@ -90,7 +90,7 @@ nav div {
     width: 45px;
     aspect-ratio: 1;
     fill: var(--text-color);
-    transition: opacity 0.11s ease;
+    transition: opacity 0.15s ease;
 }
 
 .st0, .st2, .st3 {
