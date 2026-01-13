@@ -14,11 +14,11 @@ const zoneHeight = 50;
 let isMouseDown = false;
 let mouseY = 0;
 
-const content = document.querySelector('main') || document.body.children[0];
+const main = document.querySelector('main') || document.body.children[0];
 
 function setHeight() {
-    if (content) {
-        const height = content.getBoundingClientRect().height;
+    if (main) {
+        const height = main.getBoundingClientRect().height;
         document.body.style.height = height + "px";
     };
 };
@@ -28,8 +28,8 @@ function syncScrollPosition() {
     targetY = window.scrollY;
     currentY = targetY;
 
-    if (content) {
-        content.style.transform = `translate3d(0, ${-currentY}px, 0)`;
+    if (main) {
+        main.style.transform = `translate3d(0, ${-currentY}px, 0)`;
     };
 };
 
@@ -42,6 +42,9 @@ window.addEventListener('mousemove', (e) => {
 function handleAutoScroll() {
     if (!isMouseDown) return false;
 
+    const selection = window.getSelection().toString();
+    if (!selection || selection.length === 0) return false;
+
     const winHeight = window.innerHeight;
     let delta = 0;
 
@@ -49,7 +52,7 @@ function handleAutoScroll() {
         const distanceIntoZone = (mouseY - (winHeight - zoneHeight)) / zoneHeight;
         const intensity = Math.min(Math.max(distanceIntoZone, 0), 1);
         delta = minScrollSpeed + (maxScrollSpeed - minScrollSpeed) * intensity;
-    } else if (mouseY < zoneHeight) {
+    } else if (mouseY < zoneHeight && selection.length > 0) {
         const distanceIntoZone = (zoneHeight - mouseY) / zoneHeight;
         const intensity = Math.min(Math.max(distanceIntoZone, 0), 1);
         delta = -(minScrollSpeed + (maxScrollSpeed - minScrollSpeed) * intensity);
@@ -76,8 +79,8 @@ function smoothScroll() {
         };
     };
 
-    if (content) {
-        content.style.transform = `translate3d(0, ${-currentY}px, 0)`;
+    if (main) {
+        main.style.transform = `translate3d(0, ${-currentY}px, 0)`;
     };
 
     requestAnimationFrame(smoothScroll);
@@ -120,9 +123,9 @@ if (!window.matchMedia('(pointer: coarse)').matches) {
 
 // navbar link hover effect
 
-const nav = document.querySelector('nav ul');
-const indicator = document.querySelector('nav div');
-const links = document.querySelectorAll('nav ul li a');
+const navList = document.querySelector('nav ul:not(#mobile)');
+const indicator = document.querySelector('nav ul:not(#mobile) div');
+const links = document.querySelectorAll('nav ul:not(#mobile) li a');
 
 let mouse = { x: 0, y: 0 };
 let target = { x: 0, y: 0, w: 0, h: 0, opacity: 0 };
@@ -143,7 +146,7 @@ window.addEventListener('mousemove', (e) => {
 
 function update() {
     let anyHovered = false;
-    const navHovered = nav.matches(":hover");
+    const navHovered = navList.matches(":hover");
 
     let closestLink = currentTargetLink;
     let minDistance = Infinity;
@@ -182,7 +185,11 @@ function update() {
 
         linkOffsets[index].x += (textTargetX - linkOffsets[index].x) * 0.15;
         linkOffsets[index].y += (textTargetY - linkOffsets[index].y) * 0.15;
-        link.style.transform = `translate3d(${linkOffsets[index].x}px, ${linkOffsets[index].y}px, 0)`;
+
+        if (Math.abs(linkOffsets[index].x) < 0.001) linkOffsets[index].x = 0;
+        if (Math.abs(linkOffsets[index].y) < 0.001) linkOffsets[index].y = 0;
+
+        link.style.transform = `translate3d(${linkOffsets[index].x.toFixed(2)}px, ${linkOffsets[index].y.toFixed(2)}px, 0)`;
     });
 
     const targetRect = currentTargetLink.getBoundingClientRect();
@@ -210,12 +217,25 @@ function update() {
     const oSpeed = target.opacity === 1 ? 0.7 : 0.15;
     current.opacity += (target.opacity - current.opacity) * oSpeed;
 
-    indicator.style.opacity = current.opacity;
-    indicator.style.width = `${current.w}px`;
-    indicator.style.height = `${current.h}px`;
-    indicator.style.transform = `translate3d(${current.x}px, ${current.y}px, 0)`;
+    if (current.opacity < 0.001) current.opacity = 0;
+
+    indicator.style.opacity = current.opacity.toFixed(3);
+    indicator.style.width = `${current.w.toFixed(2)}px`;
+    indicator.style.height = `${current.h.toFixed(2)}px`;
+    indicator.style.transform = `translate3d(${current.x.toFixed(2)}px, ${current.y.toFixed(2)}px, 0)`;
 
     requestAnimationFrame(update);
 };
 
 update();
+
+// ensure content top changes according to navbar height
+
+const content = document.querySelector('main');
+
+function changeContentTop() {
+    const height = nav.getBoundingClientRect().height;
+    content.style.top = `${height}px`;
+};
+
+window.addEventListener('resize', changeContentTop);
