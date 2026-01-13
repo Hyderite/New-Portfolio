@@ -259,8 +259,8 @@ function expandNavbar() {
 
 function shrinkNavbar() {
     navList.style.opacity = "0";
-    nav.style.height = '40px';
-    logo.style.width = '25px';
+    nav.style.height = '45px';
+    logo.style.width = '30px';
 
     setTimeout(function () {
         indicator.style.borderRadius = "100%";
@@ -286,7 +286,12 @@ window.addEventListener('scroll', () => {
     items = ['Home', 'About', 'Projects', 'Backyard'];
     let currentDirection = currentYPosition > yPosition ? 'down' : 'up';
 
-    if (currentDirection !== direction) {
+    if (currentDirection === 'down' && clicked) {
+        fading = true;
+        clicked = false;
+        direction = 'down';
+        shrinkNavbar();
+    } else if (currentDirection !== direction) {
         fading = true;
         direction = currentDirection;
 
@@ -295,12 +300,7 @@ window.addEventListener('scroll', () => {
         };
 
         if (currentDirection == 'up') {
-            if (!clicked) {
-                expandNavbar();
-            } else {
-                fading = false;
-                clicked = false;
-            }
+            expandNavbar();
         } else if (currentDirection == 'down') {
             shrinkNavbar();
         };
@@ -309,8 +309,9 @@ window.addEventListener('scroll', () => {
 });
 
 nav.addEventListener('click', () => {
-    if (nav.style.height === '40px' && direction === 'down') {
+    if (nav.style.height === '45px' && direction === 'down') {
         expandNavbar();
         clicked = true;
+        fading = false;
     };
 });
