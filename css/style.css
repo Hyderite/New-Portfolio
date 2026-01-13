@@ -11,11 +11,11 @@ body {
     overflow-x: hidden;
 }
 
-.viewport {
+/* .viewport {
     position: fixed;
     inset: 0;
     overflow: hidden;
-}
+} */
 
 main {
     will-change: transform;

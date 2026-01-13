@@ -1,6 +1,6 @@
 // lerp scrolling mechanism
 
-let currentY = 0;
+/* let currentY = 0;
 let targetY = 0;
 if (!window.matchMedia('(pointer: coarse)').matches) {
     ease = 0.07;
@@ -95,7 +95,7 @@ window.addEventListener('resize', setHeight);
 
 if (document.readyState === 'complete') {
     syncScrollPosition();
-};
+}; */
 
 // logo animation
 
