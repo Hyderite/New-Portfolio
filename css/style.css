@@ -110,6 +110,8 @@ nav ul {
     position: relative;
     z-index: 2;
     padding: 0;
+    transition: opacity 0.3s ease;
+    will-change: opacity;
 }
 
 nav ul li a {
@@ -143,7 +145,7 @@ nav ul#small {
     width: 45px;
     aspect-ratio: 1;
     fill: var(--text-color);
-    transition: opacity 0.12s ease;
+    transition: opacity 0.12s ease, width 0.3s ease;
 }
 
 .st0, .st2, .st3 {

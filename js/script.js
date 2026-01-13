@@ -229,32 +229,86 @@ function update() {
 
 update();
 
-// shorter navbar, items turn into icons when scrolled up
+// shorter navbar, items turn into icons when scrolled up, reverted when scrolled down or navbar clicked
 
 let yPosition = window.scrollY || document.documentElement.scrollTop;
+let direction = null;
+let fading = false;
+let clicked = false;
 const nav = document.querySelector('nav');
+
+function expandNavbar() {
+    navList.style.opacity = "0";
+    nav.style.height = '70px';
+    logo.style.width = '45px';
+    setTimeout(function () {
+        indicator.style.borderRadius = "8px";
+        navList.style.gap = "20px";
+        n = 0;
+        nav.querySelectorAll('li a').forEach((a) => {
+            a.classList.remove('material-symbols-outlined');
+            a.innerText = items[n];
+            a.style.padding = '5px 10px';
+            n = n + 1;
+        });
+        navList.style.opacity = "1";
+        fading = false;
+    }, 150);
+};
+
+function shrinkNavbar() {
+    navList.style.opacity = "0";
+    nav.style.height = '40px';
+    logo.style.width = '25px';
+
+    setTimeout(function () {
+        indicator.style.borderRadius = "100%";
+        navList.style.gap = "10px";
+        n = 0;
+        nav.querySelectorAll('li a').forEach((a) => {
+            a.classList.add('material-symbols-outlined');
+            a.innerText = icons[n];
+            a.style.padding = '5px';
+            n = n + 1;
+        });
+        navList.style.opacity = "1";
+        fading = false;
+    }, 150);
+};
 
 window.addEventListener('scroll', () => {
     const currentYPosition = window.scrollY || document.documentElement.scrollTop;
+    if (fading) return;
+    if (Math.abs(currentYPosition - yPosition) < 5) return;
+    icons = ['house', 'info', 'code', 'outdoor_garden'];
+    items = ['home', 'about', 'projects', 'backyard'];
+    let currentDirection = currentYPosition > yPosition ? 'down' : 'up';
 
-    if (currentYPosition < yPosition) {
-        // console.log('Scrolling Up');
-        nav.style.height = '70px';
-    } else if (currentYPosition > yPosition) {
-        // console.log('Scrolling Down');
-        nav.style.height = '40px';
+    if (currentDirection !== direction) {
+        fading = true;
+        direction = currentDirection;
+
+        if (direction === 'down') {
+            clicked = false;
+        };
+
+        if (currentDirection == 'up') {
+            if (!clicked) {
+                expandNavbar();
+            } else {
+                fading = false;
+                clicked = false;
+            }
+        } else if (currentDirection == 'down') {
+            shrinkNavbar();
+        };
     };
-
     yPosition = currentYPosition;
 });
 
-// ensure content top changes according to navbar height
-
-const content = document.querySelector('main');
-
-function changeContentTop() {
-    const height = nav.getBoundingClientRect().height;
-    content.style.top = `${height}px`;
-};
-
-window.addEventListener('resize', changeContentTop);
+nav.addEventListener('click', () => {
+    if (nav.style.height === '40px' && direction === 'down') {
+        expandNavbar();
+        clicked = true;
+    };
+});
