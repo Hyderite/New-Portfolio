@@ -248,6 +248,7 @@ function expandNavbar() {
         nav.querySelectorAll('li a').forEach((a) => {
             a.classList.remove('material-symbols-outlined');
             a.innerText = items[n];
+            a.title = '';
             a.style.padding = '5px 10px';
             n = n + 1;
         });
@@ -268,6 +269,7 @@ function shrinkNavbar() {
         nav.querySelectorAll('li a').forEach((a) => {
             a.classList.add('material-symbols-outlined');
             a.innerText = icons[n];
+            a.title = items[n];
             a.style.padding = '5px';
             n = n + 1;
         });
@@ -281,7 +283,7 @@ window.addEventListener('scroll', () => {
     if (fading) return;
     if (Math.abs(currentYPosition - yPosition) < 5) return;
     icons = ['house', 'info', 'code', 'outdoor_garden'];
-    items = ['home', 'about', 'projects', 'backyard'];
+    items = ['Home', 'About', 'Projects', 'Backyard'];
     let currentDirection = currentYPosition > yPosition ? 'down' : 'up';
 
     if (currentDirection !== direction) {
