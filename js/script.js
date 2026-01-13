@@ -229,6 +229,25 @@ function update() {
 
 update();
 
+// shorter navbar, items turn into icons when scrolled up
+
+let yPosition = window.scrollY || document.documentElement.scrollTop;
+const nav = document.querySelector('nav');
+
+window.addEventListener('scroll', () => {
+    const currentYPosition = window.scrollY || document.documentElement.scrollTop;
+
+    if (currentYPosition < yPosition) {
+        // console.log('Scrolling Up');
+        nav.style.height = '70px';
+    } else if (currentYPosition > yPosition) {
+        // console.log('Scrolling Down');
+        nav.style.height = '40px';
+    };
+
+    yPosition = currentYPosition;
+});
+
 // ensure content top changes according to navbar height
 
 const content = document.querySelector('main');
