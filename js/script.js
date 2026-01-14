@@ -339,6 +339,7 @@ menuButton.addEventListener('click', () => {
         mobileMenuFading = true;
         mobileMenu.style.display = "flex";
         document.querySelector('main').style.filter = "blur(6px)";
+        document.querySelector('main').style.overflow = 'hidden';
         mobileMenu.style.visibility = "visible";
         mobileMenu.style.opacity = "1";
         menuButton.style.opacity = "0";
@@ -360,6 +361,7 @@ menuButton.addEventListener('click', () => {
     } else {
         mobileMenuFading = true;
         document.querySelector('main').style.filter = "blur(0)";
+        document.querySelector('main').style.overflow = 'visible';
         mobileMenu.style.opacity = "0";
         menuButton.style.opacity = "0";
         setTimeout(() => {
