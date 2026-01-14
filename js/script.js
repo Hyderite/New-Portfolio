@@ -300,7 +300,12 @@ window.addEventListener('scroll', () => {
         };
 
         if (currentDirection == 'up') {
-            expandNavbar();
+            if (!clicked) {
+                expandNavbar();
+            } else {
+                clicked = false;
+                fading = false;
+            };
         } else if (currentDirection == 'down') {
             shrinkNavbar();
         };
