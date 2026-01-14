@@ -22,7 +22,7 @@ main {
     backface-visibility: hidden;
     position: relative;
     top: 70px;
-    transition: top .2s ease;
+    transition: top 0.2s ease, filter 0.3s ease;
 }
 
 h1, h2, .title {
@@ -171,6 +171,88 @@ nav ul#small {
     }
     to {
         stroke-dashoffset: 0;
+        opacity: 1;
+    }
+}
+
+#menu-button {
+    display: none;
+    margin-left: auto;
+    width: 45px;
+    aspect-ratio: 1;
+    background-color: transparent;
+    border: none;
+    color: var(--text-color);
+    z-index: 10;
+    transition: opacity 0.15s ease, width 0.3s ease;
+}
+
+#mobile-menu {
+    height: 100vh;
+    width: 100vw;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: #2121216e;
+    z-index: -1;
+    overflow: hidden;
+    opacity: 0;
+    visibility: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    transition: visibility 0.3s ease, opacity 0.3s ease;
+}
+
+/* mobile navbar */
+
+@media screen and (max-width: 480px) {
+    nav ul:not(#mobile) {
+        display: none;
+    }
+
+    nav {
+        padding: 15px;
+    }
+
+    #menu-button {
+        display: block;
+    }
+
+    ul#mobile {
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        height: 100vh;
+        margin: 0;
+    }
+
+    ul#mobile li a {
+        transform: translateY(10px) rotateX(-45deg);
+        opacity: 0;
+        z-index: 10;
+        padding: 0;
+        transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    ul#mobile li a::after {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--theme-color);
+        z-index: 1;
+        transform: translateY(3px);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform;
+        opacity: 0;
+    }
+
+    ul#mobile li a:focus::after, ul#mobile li a:active::after {
+        transform: translateY(0);
         opacity: 1;
     }
 }
