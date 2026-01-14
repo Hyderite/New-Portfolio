@@ -333,7 +333,9 @@ let mobileMenuFading = false;
 menuButton.addEventListener('click', () => {
     const isHidden = mobileMenu.style.visibility === "hidden" || mobileMenu.style.display === "";
 
-    if (isHidden && !mobileMenuFading) {
+    if (mobileMenuFading) return;
+
+    if (isHidden) {
         mobileMenuFading = true;
         mobileMenu.style.display = "flex";
         document.querySelector('main').style.filter = "blur(6px)";
