@@ -328,11 +328,13 @@ nav.addEventListener('click', () => {
 const mobileMenu = document.querySelector('#mobile-menu');
 const mobileNav = document.querySelector('nav #mobile-menu ul#mobile');
 const menuButton = document.querySelector('#menu-button');
+let mobileMenuFading = false;
 
 menuButton.addEventListener('click', () => {
     const isHidden = mobileMenu.style.visibility === "hidden" || mobileMenu.style.display === "";
 
-    if (isHidden) {
+    if (isHidden && !mobileMenuFading) {
+        mobileMenuFading = true;
         mobileMenu.style.display = "flex";
         document.querySelector('main').style.filter = "blur(6px)";
         mobileMenu.style.visibility = "visible";
@@ -341,6 +343,7 @@ menuButton.addEventListener('click', () => {
         setTimeout(() => {
             menuButton.style.opacity = "1";
             menuButton.innerText = "close";
+            mobileMenuFading = false;
         }, 150);
 
         mobileNav.querySelectorAll('li a').forEach((a, index) => {
@@ -356,6 +359,7 @@ menuButton.addEventListener('click', () => {
         setTimeout(() => {
             menuButton.style.opacity = "1";
             menuButton.innerText = "menu";
+            mobileMenuFading = false;
         }, 150);
 
         setTimeout(() => {
