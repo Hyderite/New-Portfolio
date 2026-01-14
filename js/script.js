@@ -345,7 +345,6 @@ menuButton.addEventListener('click', () => {
         setTimeout(() => {
             menuButton.style.opacity = "1";
             menuButton.innerText = "close";
-            mobileMenuFading = false;
         }, 150);
 
         mobileNav.querySelectorAll('li a').forEach((a, index) => {
@@ -354,14 +353,18 @@ menuButton.addEventListener('click', () => {
                 a.style.transform = "translateY(0) rotateX(0)";
             }, 300 + (index * 100));
         });
+
+        setTimeout(() => {
+            mobileMenuFading = false;
+        }, 300);
     } else {
+        mobileMenuFading = true;
         document.querySelector('main').style.filter = "blur(0)";
         mobileMenu.style.opacity = "0";
         menuButton.style.opacity = "0";
         setTimeout(() => {
             menuButton.style.opacity = "1";
             menuButton.innerText = "menu";
-            mobileMenuFading = false;
         }, 150);
 
         setTimeout(() => {
@@ -370,7 +373,7 @@ menuButton.addEventListener('click', () => {
                 a.style.opacity = "0";
                 a.style.transform = "translateY(10px) rotateX(-45deg)";
             });
-
-        }, 500);
+            mobileMenuFading = false;
+        }, 300);
     };
 });
