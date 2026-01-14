@@ -339,6 +339,8 @@ menuButton.addEventListener('click', () => {
         mobileMenuFading = true;
         mobileMenu.style.display = "flex";
         document.querySelector('main').style.filter = "blur(6px)";
+        nav.style.backdropFilter = 'blur(0)';
+        nav.style.webkitBackdropFilter = 'blur(0)';
         document.querySelector('body').style.overflow = 'hidden';
         mobileMenu.style.visibility = "visible";
         mobileMenu.style.opacity = "1";
@@ -361,6 +363,8 @@ menuButton.addEventListener('click', () => {
     } else {
         mobileMenuFading = true;
         document.querySelector('main').style.filter = "blur(0)";
+        nav.style.backdropFilter = 'blur(6px)';
+        nav.style.webkitBackdropFilter = 'blur(6px)';
         document.querySelector('body').style.overflow = 'visible';
         mobileMenu.style.opacity = "0";
         menuButton.style.opacity = "0";

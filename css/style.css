@@ -91,7 +91,7 @@ nav {
     box-sizing: border-box;
     display: flex;
     align-items: center;
-    transition: height 0.3s ease;
+    transition: height 0.3s ease, backdrop-filter 0.28s ease;
 }
 
 nav a {
