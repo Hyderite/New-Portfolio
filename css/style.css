@@ -1,6 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Lexend:wght@100..900&family=UoqMunThenKhung&display=swap');
 
-@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0');
+@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,1,0&display=block');
 
 body {
     font-family: "DM Sans", "UoqMunThenKhung", sans-serif;
@@ -15,7 +15,7 @@ body {
     position: fixed;
     inset: 0;
     overflow: hidden;
-} */
+} */x
 
 main {
     will-change: transform;
