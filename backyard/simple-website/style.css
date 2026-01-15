@@ -1,0 +1,76 @@
+html {
+  overflow: hidden;
+}
+
+body {
+  font-family: "Nunito", sans-serif;
+  background-color: #c5c5c5;
+  background-image: linear-gradient(to bottom right, rgb(255, 0, 208), rgb(255, 153, 0));
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-size: cover;
+  overflow: hidden;
+  color: #fff;
+  margin: 0;
+  padding: 0;
+}
+
+#container {
+  display: flex;
+  align-items: center;
+  flex-flow: column;
+  width: 100vw;
+  height: 100vh;
+  margin-bottom: 10px;
+  padding-top: 10px;
+  overflow-y: scroll;
+}
+
+#pfp {
+  width: 150px;
+  height: 150px;
+  border-radius: 100%;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 70px;
+  margin: 0;
+  margin-top: 5px;
+}
+
+.subtitle {
+  font-weight: bold;
+  font-size: 40px;
+  margin: 0;
+  margin-top: 5px;
+}
+
+.btn {
+  margin: 7.5px;
+  padding: 10px 200px;
+  background-color: transparent;
+  border: #fff 2px solid;
+  text-decoration: none;
+  color: #fff;
+  transition: background-color .35s, color .35s;
+}
+
+.btn:hover {
+  background-color: #fff;
+  color: #000;
+}
+
+@media all and (max-width: 480px) {
+  #container {
+    transform: translateX(-10px);
+  }
+
+  .btn {
+    padding: 10px 50px !important;
+  }
+
+  #about-me {
+    padding: 5px 10px !important;
+  }
+}
