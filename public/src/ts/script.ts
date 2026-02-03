@@ -99,14 +99,14 @@ const ui = {
   body: document.body,
   main: (document.querySelector('main') || document.body.children[0]) as HTMLElement,
   nav: document.querySelector('nav') as HTMLElement,
-  logo: document.querySelector('#logo') as HTMLElement,
-  logoLink: document.querySelector('nav > a') as HTMLElement,
-  navList: document.querySelector('nav ul:not(#mobile)') as HTMLElement,
-  indicator: document.querySelector('nav ul:not(#mobile) div') as HTMLElement,
-  links: document.querySelectorAll('nav ul:not(#mobile) li a') as NodeListOf<HTMLElement>,
-  menuBtn: document.querySelector('#menu-button') as HTMLElement,
-  mobileMenu: document.querySelector('#mobile-menu') as HTMLElement,
-  mobileNav: document.querySelector('nav #mobile-menu ul#mobile') as HTMLElement,
+  logo: document.querySelector('#logo') as HTMLImageElement,
+  logoLink: document.querySelector('nav > a') as HTMLAnchorElement,
+  navList: document.querySelector('nav ul:not(#mobile)') as HTMLUListElement,
+  indicator: document.querySelector('nav ul:not(#mobile) div') as HTMLDivElement,
+  links: document.querySelectorAll('nav ul:not(#mobile) li a') as NodeListOf<HTMLAnchorElement>,
+  menuBtn: document.querySelector('#menu-button') as HTMLButtonElement,
+  mobileMenu: document.querySelector('#mobile-menu') as HTMLDivElement,
+  mobileNav: document.querySelector('nav #mobile-menu ul#mobile') as HTMLUListElement,
 };
 
 const state = {
@@ -118,7 +118,7 @@ const state = {
     fading: false,
     clicked: false,
     mobileMenuFading: false,
-    currentTargetLink: ui.links[0] as HTMLElement,
+    currentTargetLink: ui.links[0] as HTMLAnchorElement,
   },
   mouse: { x: 0, y: 0 },
   indicator: {
@@ -126,9 +126,6 @@ const state = {
     current: { x: 0, y: 0, w: 0, h: 0, opacity: 0 },
   },
   linkOffsets: Array.from(ui.links).map(() => ({ x: 0, y: 0 })),
-};
-
-const config = {
   content: {
     icons: ['house', 'info', 'code', 'outdoor_garden'],
     items: ['Home', 'About', 'Projects', 'Backyard'],
@@ -269,7 +266,7 @@ function expandNavbar() {
     ui.navList.style.gap = '20px';
     ui.links.forEach((a, n) => {
       a.classList.remove('material-symbols-outlined');
-      a.innerText = config.content.items[n];
+      a.innerText = state.content.items[n];
       a.title = '';
       a.style.padding = '5px 10px';
     });
@@ -289,8 +286,8 @@ function shrinkNavbar() {
     ui.navList.style.gap = '10px';
     ui.links.forEach((a, n) => {
       a.classList.add('material-symbols-outlined');
-      a.innerText = config.content.icons[n];
-      a.title = config.content.items[n];
+      a.innerText = state.content.icons[n];
+      a.title = state.content.items[n];
       a.style.padding = '5px';
     });
     ui.navList.style.opacity = '1';
@@ -351,7 +348,7 @@ ui.menuBtn.addEventListener('click', () => {
     ui.mobileMenu.style.display = 'flex';
     ui.main.style.filter = 'blur(6px)';
     ui.nav.style.backdropFilter = 'blur(0)';
-    (ui.nav.style as any).webkitBackdropFilter = 'blur(0)';
+    ui.nav.style.setProperty('-webkit-backdrop-filter', 'blur(0)');
     ui.body.style.overflow = 'hidden';
     ui.mobileMenu.style.visibility = 'visible';
     ui.mobileMenu.style.opacity = '1';
@@ -361,7 +358,7 @@ ui.menuBtn.addEventListener('click', () => {
       ui.menuBtn.innerText = 'close';
     }, 150);
 
-    ui.mobileNav.querySelectorAll('li a').forEach((a: any, index: number) => {
+    ui.mobileNav.querySelectorAll<HTMLAnchorElement>('li a').forEach((a, index: number) => {
       setTimeout(
         () => {
           a.style.opacity = '1';
@@ -378,7 +375,7 @@ ui.menuBtn.addEventListener('click', () => {
     state.navbar.mobileMenuFading = true;
     ui.main.style.filter = 'blur(0)';
     ui.nav.style.backdropFilter = 'blur(6px)';
-    (ui.nav.style as any).webkitBackdropFilter = 'blur(6px)';
+    ui.nav.style.setProperty('-webkit-backdrop-filter', 'blur(6px)');
     ui.body.style.overflow = 'visible';
     ui.mobileMenu.style.opacity = '0';
     ui.menuBtn.style.opacity = '0';
@@ -389,7 +386,7 @@ ui.menuBtn.addEventListener('click', () => {
 
     setTimeout(() => {
       ui.mobileMenu.style.visibility = 'hidden';
-      ui.mobileNav.querySelectorAll('li a').forEach((a: any) => {
+      ui.mobileNav.querySelectorAll<HTMLAnchorElement>('li a').forEach((a) => {
         a.style.opacity = '0';
         a.style.transform = 'translateY(10px) rotateX(-45deg)';
       });
