@@ -2,8 +2,8 @@
     "compilerOptions": {
         "target": "ES6",
         "module": "ESNext",
-        "outDir": "./dist/js",
-        "rootDir": "./src/ts",
+        "outDir": "./public/dist/js",
+        "rootDir": "./public/src/ts",
         "strict": true,
         "esModuleInterop": true
     },
