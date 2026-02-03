@@ -13,5 +13,10 @@
     "dev:ts": "tsc -w",
     "dev:css": "nodemon --watch public/src/css -e css --exec \"pnpm build:css\"",
     "dev": "concurrently \"pnpm dev:ts\" \"pnpm dev:css\""
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
