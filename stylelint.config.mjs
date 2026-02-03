@@ -1,7 +1,9 @@
+import standardConfig from 'stylelint-config-standard';
+
 /** @type {import('stylelint').Config} */
 export default {
-  extends: ['stylelint-config-standard'],
+  extends: [standardConfig],
   rules: {
-    'block-no-empty': true
+    'block-no-empty': true,
   },
 };
