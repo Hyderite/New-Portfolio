@@ -10,12 +10,6 @@ body {
   overflow-x: hidden;
 }
 
-/* .viewport {
-    position: fixed;
-    inset: 0;
-    overflow: hidden;
-} */
-
 main {
   will-change: transform;
   backface-visibility: hidden;
@@ -24,6 +18,39 @@ main {
   transition:
     top 0.2s ease,
     filter 0.3s ease;
+
+  & a {
+    color: var(--text-color);
+    text-decoration: underline;
+    display: inline-block;
+    position: relative;
+    transform: translateZ(0);
+    transition:
+      color 0.3s ease,
+      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+
+    &::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 2px;
+      bottom: 0;
+      left: 50%;
+      background-color: var(--theme-color);
+      z-index: -1;
+      transform: translate3d(-50%, 0, 0) scaleX(1);
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      will-change: transform;
+    }
+
+    &:hover {
+      transform: translateY(-1.5px);
+
+      &::after {
+        transform: translate3d(-50%, 1.5px, 0) scaleX(0.4);
+      }
+    }
+  }
 }
 
 h1,
@@ -33,43 +60,10 @@ h2,
   font-weight: 800;
 }
 
-main a {
-  color: var(--text-color);
-  text-decoration: underline;
-  display: inline-block;
-  position: relative;
-  transform: translateZ(0);
-  transition:
-    color 0.3s ease,
-    transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
 @supports (text-decoration: none) {
   main a {
     text-decoration: none;
   }
-}
-
-main a::after {
-  content: '';
-  position: absolute;
-  width: 100%;
-  height: 2px;
-  bottom: 0;
-  left: 50%;
-  background-color: var(--theme-color);
-  z-index: -1;
-  transform: translate3d(-50%, 0, 0) scaleX(1);
-  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  will-change: transform;
-}
-
-main a:hover {
-  transform: translateY(-1.5px);
-}
-
-main a:hover::after {
-  transform: translate3d(-50%, 1.5px, 0) scaleX(0.4);
 }
 
 p,
@@ -257,38 +251,38 @@ nav {
     flex-direction: column;
     height: 100vh;
     margin: 0;
-  }
 
-  ul#mobile li a {
-    transform: translateY(10px) rotateX(-45deg);
-    opacity: 0;
-    z-index: 10;
-    padding: 0;
-    transition:
-      opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  }
+    & li a {
+      transform: translateY(10px) rotateX(-45deg);
+      opacity: 0;
+      z-index: 10;
+      padding: 0;
+      transition:
+        opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+        transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 
-  ul#mobile li a::after {
-    content: '';
-    position: absolute;
-    width: 100%;
-    height: 2px;
-    bottom: 0;
-    left: 0;
-    background-color: var(--theme-color);
-    z-index: 1;
-    transform: translateY(3px);
-    transition:
-      transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-      opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    will-change: transform;
-    opacity: 0;
-  }
+      &::after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: var(--theme-color);
+        z-index: 1;
+        transform: translateY(3px);
+        transition:
+          transform 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+          opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        will-change: transform;
+        opacity: 0;
+      }
 
-  ul#mobile li a:focus::after,
-  ul#mobile li a:active::after {
-    transform: translateY(0);
-    opacity: 1;
+      &:focus::after,
+      &:active::after {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
   }
 }
