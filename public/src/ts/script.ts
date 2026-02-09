@@ -16,7 +16,7 @@ const ui: ui = {
   body: document.body,
   main: (document.querySelector('main')! || document.body.children[0])!,
   nav: document.querySelector('nav')!,
-  logo: document.querySelector('#logo')!,
+  logo: document.querySelector('a #logo')!,
   logoLink: document.querySelector('nav > a')!,
   navList: document.querySelector('nav ul:not(#mobile)')!,
   indicator: document.querySelector('nav ul:not(#mobile) div')!,
