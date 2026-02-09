@@ -1,112 +1,29 @@
-// lerp scrolling mechanism
+interface ui {
+  body: HTMLElement;
+  main: HTMLElement;
+  nav: HTMLElement;
+  logo: HTMLImageElement;
+  logoLink: HTMLAnchorElement;
+  navList: HTMLUListElement;
+  indicator: HTMLDivElement;
+  links: NodeListOf<HTMLAnchorElement>;
+  menuBtn: HTMLButtonElement;
+  mobileMenu: HTMLDivElement;
+  mobileNav: HTMLUListElement;
+}
 
-/* if (!window.matchMedia('(pointer: coarse)').matches) {
-    ease = 0.07;
-} else {
-    ease = 0.1;
-};
-
-const minScrollSpeed = 2;
-const maxScrollSpeed = 35;
-const zoneHeight = 50;
-let isMouseDown = false;
-let mouseY = 0;
-
-const main = document.querySelector('main') || document.body.children[0];
-
-function setHeight() {
-    if (main) {
-        const height = main.getBoundingClientRect().height;
-        document.body.style.height = height + 'px';
-    };
-};
-
-function syncScrollPosition() {
-    setHeight();
-    targetY = window.scrollY;
-    currentY = targetY;
-
-    if (main) {
-        main.style.transform = `translate3d(0, ${-currentY}px, 0)`;
-    };
-};
-
-window.addEventListener('mousedown', () => isMouseDown = true);
-window.addEventListener('mouseup', () => isMouseDown = false);
-window.addEventListener('mousemove', (e) => {
-    mouseY = e.clientY;
-});
-
-function handleAutoScroll() {
-    if (!isMouseDown) return false;
-
-    const selection = window.getSelection().toString();
-    if (!selection || selection.length === 0) return false;
-
-    const winHeight = window.innerHeight;
-    let delta = 0;
-
-    if (mouseY > winHeight - zoneHeight) {
-        const distanceIntoZone = (mouseY - (winHeight - zoneHeight)) / zoneHeight;
-        const intensity = Math.min(Math.max(distanceIntoZone, 0), 1);
-        delta = minScrollSpeed + (maxScrollSpeed - minScrollSpeed) * intensity;
-    } else if (mouseY < zoneHeight && selection.length > 0) {
-        const distanceIntoZone = (zoneHeight - mouseY) / zoneHeight;
-        const intensity = Math.min(Math.max(distanceIntoZone, 0), 1);
-        delta = -(minScrollSpeed + (maxScrollSpeed - minScrollSpeed) * intensity);
-    };
-
-    if (delta !== 0) {
-        window.scrollBy(0, delta);
-        targetY = window.scrollY;
-        currentY = targetY;
-        return true;
-    };
-    return false;
-};
-
-function smoothScroll() {
-    const isAutoScrolling = handleAutoScroll();
-    if (!isAutoScrolling) {
-        targetY = window.scrollY;
-        const diff = targetY - currentY;
-        currentY += diff * ease;
-
-        if (Math.abs(diff) < 0.001) {
-            currentY = targetY;
-        };
-    };
-
-    if (main) {
-        main.style.transform = `translate3d(0, ${-currentY}px, 0)`;
-    };
-
-    requestAnimationFrame(smoothScroll);
-};
-
-window.addEventListener('load', () => {
-    syncScrollPosition();
-    smoothScroll();
-});
-
-window.addEventListener('resize', setHeight);
-
-if (document.readyState === 'complete') {
-    syncScrollPosition();
-}; */
-
-const ui = {
+const ui: ui = {
   body: document.body,
-  main: (document.querySelector('main') || document.body.children[0]) as HTMLElement,
-  nav: document.querySelector('nav') as HTMLElement,
-  logo: document.querySelector('#logo') as HTMLImageElement,
-  logoLink: document.querySelector('nav > a') as HTMLAnchorElement,
-  navList: document.querySelector('nav ul:not(#mobile)') as HTMLUListElement,
-  indicator: document.querySelector('nav ul:not(#mobile) div') as HTMLDivElement,
-  links: document.querySelectorAll('nav ul:not(#mobile) li a') as NodeListOf<HTMLAnchorElement>,
-  menuBtn: document.querySelector('#menu-button') as HTMLButtonElement,
-  mobileMenu: document.querySelector('#mobile-menu') as HTMLDivElement,
-  mobileNav: document.querySelector('nav #mobile-menu ul#mobile') as HTMLUListElement,
+  main: (document.querySelector('main')! || document.body.children[0])!,
+  nav: document.querySelector('nav')!,
+  logo: document.querySelector('#logo')!,
+  logoLink: document.querySelector('nav > a')!,
+  navList: document.querySelector('nav ul:not(#mobile)')!,
+  indicator: document.querySelector('nav ul:not(#mobile) div')!,
+  links: document.querySelectorAll('nav ul:not(#mobile) li a')!,
+  menuBtn: document.querySelector('#menu-button')!,
+  mobileMenu: document.querySelector('#mobile-menu')!,
+  mobileNav: document.querySelector('nav #mobile-menu ul#mobile')!,
 };
 
 const state = {
@@ -255,7 +172,7 @@ function update() {
 
 update();
 
-// shorter navbar functions
+// dynamically sized navbar
 function expandNavbar() {
   ui.navList.style.opacity = '0';
   ui.nav.style.height = '70px';
