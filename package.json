@@ -2,13 +2,15 @@
   "devDependencies": {
     "chokidar-cli": "^3.0.0",
     "concurrently": "^9.2.1",
-    "lightningcss-cli": "^1.31.1",
+    "cssnano": "^7.1.2",
+    "postcss": "^8.5.6",
+    "postcss-cli": "^11.0.1",
     "stylelint": "^17.1.0",
     "stylelint-config-standard": "^40.0.0",
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "build:css": "powershell -ExecutionPolicy Bypass -Command \"Get-ChildItem public/src/css/*.css | ForEach-Object { lightningcss --minify $_.FullName -o \\\"public/dist/css/$($_.BaseName).min.css\\\" }\"",
+    "build:css": "postcss public/src/css/*.css --dir public/dist/css/ --ext .min.css",
     "build:ts": "tsc",
     "build": "pnpm build:css && pnpm build:ts",
     "dev:ts": "tsc -w",
