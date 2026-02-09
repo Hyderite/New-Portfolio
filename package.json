@@ -1,5 +1,6 @@
 {
   "devDependencies": {
+    "chokidar-cli": "^3.0.0",
     "concurrently": "^9.2.1",
     "lightningcss-cli": "^1.31.1",
     "stylelint": "^17.1.0",
@@ -11,7 +12,7 @@
     "build:ts": "tsc",
     "build": "pnpm build:css && pnpm build:ts",
     "dev:ts": "tsc -w",
-    "dev:css": "nodemon --watch public/src/css -e css --exec \"pnpm build:css\"",
+    "dev:css": "chokidar \"public/src/css/**/*.css\" -c \"pnpm build:css\"",
     "dev": "concurrently \"pnpm dev:ts\" \"pnpm dev:css\""
   },
   "pnpm": {
