@@ -6,11 +6,11 @@
         "rootDir": "./public/src/ts",
         "strict": true,
         "esModuleInterop": true,
-        "moduleResolution": "bundler",
-        "allowImportingTsExtensions": true,
+        "moduleResolution": "node",
+        "noEmit": false,
+        "allowImportingTsExtensions": false,
         "resolveJsonModule": true,
-        "isolatedModules": true,
-        "noEmit": true,
+        "isolatedModules": true
     },
     "include": [
         "public/src/ts/**/*"
