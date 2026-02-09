@@ -53,11 +53,11 @@ const state = {
 // logo animation
 function logoAnimation() {
   ui.logo.style.opacity = '0';
-  setTimeout(function () {
+  setTimeout(() => {
     ui.logo.style.opacity = '1';
     ui.logo.classList.remove('animate');
   }, 50);
-  setTimeout(function () {
+  setTimeout(() => {
     ui.logo.classList.add('animate');
   }, 70);
 }
@@ -183,7 +183,7 @@ function expandNavbar() {
   ui.nav.style.height = '70px';
   ui.logo.style.width = '45px';
   ui.menuBtn.style.width = '45px';
-  setTimeout(function () {
+  setTimeout(() => {
     ui.indicator.style.borderRadius = '8px';
     ui.navList.style.gap = '20px';
     ui.links.forEach((a, n) => {
@@ -203,7 +203,7 @@ function shrinkNavbar() {
   ui.logo.style.width = '30px';
   ui.menuBtn.style.width = '30px';
 
-  setTimeout(function () {
+  setTimeout(() => {
     ui.indicator.style.borderRadius = '100%';
     ui.navList.style.gap = '10px';
     ui.links.forEach((a, n) => {
