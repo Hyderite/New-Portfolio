@@ -5,7 +5,12 @@
         "outDir": "./public/dist/js",
         "rootDir": "./public/src/ts",
         "strict": true,
-        "esModuleInterop": true
+        "esModuleInterop": true,
+        "moduleResolution": "bundler",
+        "allowImportingTsExtensions": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": true,
     },
     "include": [
         "public/src/ts/**/*"
