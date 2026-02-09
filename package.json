@@ -8,7 +8,7 @@
     "typescript": "^5.9.3"
   },
   "scripts": {
-    "build:css": "lightningcss --minify public/src/css/style.css -o public/dist/css/style.min.css",
+    "build:css": "powershell -ExecutionPolicy Bypass -Command \"Get-ChildItem public/src/css/*.css | ForEach-Object { lightningcss --minify $_.FullName -o \\\"public/dist/css/$($_.BaseName).min.css\\\" }\"",
     "build:ts": "tsc",
     "build": "pnpm build:css && pnpm build:ts",
     "dev:ts": "tsc -w",
