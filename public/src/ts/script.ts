@@ -42,6 +42,7 @@ const state = {
     target: { x: 0, y: 0, w: 0, h: 0, opacity: 0 },
     current: { x: 0, y: 0, w: 0, h: 0, opacity: 0 },
   },
+  linkRects: Array.from(ui.links).map((link) => link.getBoundingClientRect()),
   linkOffsets: Array.from(ui.links).map(() => ({ x: 0, y: 0 })),
   content: {
     icons: ['house', 'info', 'code', 'outdoor_garden'],
@@ -83,16 +84,18 @@ window.addEventListener('mousemove', (e) => {
   state.mouse.y = e.clientY;
 });
 
-function update() {
-  let anyHovered = false;
-  const navHovered = ui.navList.matches(':hover');
+function updateRects() {
+  state.linkRects = Array.from(ui.links).map((link) => link.getBoundingClientRect());
+}
 
+function update() {
+  const navHovered = ui.navList.matches(':hover');
   let closestLink = state.navbar.currentTargetLink;
   let minDistance = Infinity;
 
   if (navHovered) {
-    ui.links.forEach((link) => {
-      const rect = link.getBoundingClientRect();
+    ui.links.forEach((link, index) => {
+      const rect = state.linkRects[index];
       const centerX = rect.left + rect.width / 2;
       const centerY = rect.top + rect.height / 2;
       const distance = Math.hypot(state.mouse.x - centerX, state.mouse.y - centerY);
@@ -106,7 +109,7 @@ function update() {
   }
 
   ui.links.forEach((link, index) => {
-    const rect = link.getBoundingClientRect();
+    const rect = state.linkRects[index];
     const isDirectlyHovered =
       state.mouse.x > rect.left &&
       state.mouse.x < rect.right &&
@@ -119,7 +122,6 @@ function update() {
       textTargetY = 0;
 
     if (isDirectlyHovered) {
-      anyHovered = true;
       const deltaX = state.mouse.x - centerX;
       const deltaY = state.mouse.y - centerY;
       textTargetX = deltaX * 0.12;
@@ -129,13 +131,14 @@ function update() {
     state.linkOffsets[index].x += (textTargetX - state.linkOffsets[index].x) * 0.15;
     state.linkOffsets[index].y += (textTargetY - state.linkOffsets[index].y) * 0.15;
 
-    if (Math.abs(state.linkOffsets[index].x) < 0.001) state.linkOffsets[index].x = 0;
-    if (Math.abs(state.linkOffsets[index].y) < 0.001) state.linkOffsets[index].y = 0;
+    if (Math.abs(state.linkOffsets[index].x) < 0.01 && textTargetX === 0) state.linkOffsets[index].x = 0;
+    if (Math.abs(state.linkOffsets[index].y) < 0.01 && textTargetY === 0) state.linkOffsets[index].y = 0;
 
     link.style.transform = `translate3d(${state.linkOffsets[index].x.toFixed(2)}px, ${state.linkOffsets[index].y.toFixed(2)}px, 0)`;
   });
 
-  const targetRect = state.navbar.currentTargetLink.getBoundingClientRect();
+  const targetIndex = Array.from(ui.links).indexOf(state.navbar.currentTargetLink);
+  const targetRect = state.linkRects[targetIndex];
   state.indicator.target.opacity = navHovered ? 1 : 0;
 
   if (navHovered) {
@@ -169,6 +172,8 @@ function update() {
 
   requestAnimationFrame(update);
 }
+
+window.addEventListener('resize', updateRects);
 
 update();
 
