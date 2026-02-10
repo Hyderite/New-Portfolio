@@ -21,15 +21,15 @@ window.addEventListener('load', async () => {
   const skip = () => {
     if (animation.text.intro) {
       animation.text.intro.forEach((span) => {
-        span.style.transition = 'none';
+        span.style.transition = 'color 0.3s ease';
         span.offsetHeight;
         span.style.opacity = '1';
       });
     }
     if (dot) {
-      document
-        .querySelectorAll<HTMLSpanElement>('#name span')!
-        .forEach((span) => (span.style.color = 'var(--theme-color)'));
+      document.querySelectorAll<HTMLSpanElement>('#name span')!.forEach((span, index) => {
+        setTimeout(() => (span.style.color = 'var(--theme-color)'), index * 80);
+      });
       document.querySelector<HTMLElement>('#name')?.classList.add('draw');
       dot.style.opacity = '1';
       dot.style.transform = `translateX(0px)`;
