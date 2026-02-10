@@ -3,6 +3,7 @@
 .env*.local
 New Portfolio.drawio
 .$New Portfolio.drawio.bkp
+.$New Portfolio.drawio.dtmp
 .env
 node_modules
 public/dist/
