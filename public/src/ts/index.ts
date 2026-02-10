@@ -16,63 +16,83 @@ window.addEventListener('load', async () => {
 
   const dot = document.querySelector<HTMLSpanElement>('#dot')!;
 
-  if (dot && animation.text.intro) {
-    dot.style.transition = 'none';
-    dot.style.opacity = '0';
-    animation.logo.style.display = 'block';
+  const visited = sessionStorage.getItem('visited');
 
-    await sleep(100);
-
-    animation.logo.classList.add('animate');
-
-    await sleep(1500);
-
-    animation.strokes.forEach((stroke) => (stroke.style.strokeWidth = '0px'));
-
-    await sleep(500);
-
+  const skip = () => {
+    if (animation.text.intro) {
+      animation.text.intro.forEach((span) => (span.style.opacity = '1'));
+    }
+    if (dot) {
+      dot.style.opacity = '1';
+      dot.style.transform = `translateX(0px)`;
+    }
+    navbar.style.transform = 'translateY(0)';
     animation.logo.style.display = 'none';
-    animation.text.hello.forEach((span, index) => {
-      span.style.opacity = '0';
-      setTimeout(() => {
-        span.style.opacity = '1';
-      }, index * 100);
-    });
+  };
 
-    await sleep(1000);
+  if (visited) {
+    skip();
+  } else {
+    sessionStorage.setItem('visited', 'true');
 
-    animation.text.hello.forEach((span, index) => {
-      setTimeout(() => {
+    if (dot && animation.text.intro) {
+      dot.style.transition = 'none';
+      dot.style.opacity = '0';
+      animation.logo.style.display = 'block';
+
+      await sleep(100);
+
+      animation.logo.classList.add('animate');
+
+      await sleep(1500);
+
+      animation.strokes.forEach((stroke) => (stroke.style.strokeWidth = '0px'));
+
+      await sleep(500);
+
+      animation.logo.style.display = 'none';
+      animation.text.hello.forEach((span, index) => {
         span.style.opacity = '0';
-      }, index * 100);
-    });
+        setTimeout(() => {
+          span.style.opacity = '1';
+        }, index * 100);
+      });
 
-    await sleep(1500);
+      await sleep(1000);
 
-    animation.text.intro.forEach((span, index) => {
-      span.style.opacity = '0';
+      animation.text.hello.forEach((span, index) => {
+        setTimeout(() => {
+          span.style.opacity = '0';
+        }, index * 100);
+      });
+
+      await sleep(1500);
+
+      animation.text.intro.forEach((span, index) => {
+        span.style.opacity = '0';
+        setTimeout(() => {
+          span.style.opacity = '1';
+        }, index * 50);
+      });
+
+      await sleep(animation.text.intro.length * 50 + 400);
+
+      document.querySelector<HTMLElement>('nav')!.style.transform = 'translateY(0)';
       setTimeout(() => {
-        span.style.opacity = '1';
-      }, index * 50);
-    });
+        if ((window as any).updateRects) {
+          (window as any).updateRects();
+        }
+      }, 500);
 
-    await sleep(animation.text.intro.length * 50 + 400);
+      dot.style.transition = 'none';
+      dot.style.transform = `translateX(-50%)`;
+      dot.style.opacity = '0';
 
-    document.querySelector<HTMLElement>('nav')!.style.transform = 'translateY(0)';
-    setTimeout(() => {
-      if ((window as any).updateRects) {
-        (window as any).updateRects();
-      }
-    }, 500);
+      dot.offsetHeight;
 
-    dot.style.transition = 'none';
-    dot.style.transform = `translateX(-50%)`;
-    dot.style.opacity = '0';
-
-    dot.offsetHeight;
-
-    dot.style.transition = 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease-out';
-    dot.style.transform = `translateX(0px)`;
-    dot.style.opacity = '1';
+      dot.style.transition = 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease-out';
+      dot.style.transform = `translateX(0px)`;
+      dot.style.opacity = '1';
+    }
   }
 });
