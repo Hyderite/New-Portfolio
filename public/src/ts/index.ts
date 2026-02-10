@@ -30,6 +30,7 @@ window.addEventListener('load', async () => {
       document
         .querySelectorAll<HTMLSpanElement>('#name span')!
         .forEach((span) => (span.style.color = 'var(--theme-color)'));
+      document.querySelector<HTMLElement>('#name')?.classList.add('draw');
       dot.style.opacity = '1';
       dot.style.transform = `translateX(0px)`;
     }
@@ -102,8 +103,11 @@ window.addEventListener('load', async () => {
 
       dot.offsetHeight;
 
-      document.querySelectorAll<HTMLSpanElement>('#name span')!.forEach((span) => {
-        span.style.color = 'var(--theme-color)';
+      document.querySelectorAll<HTMLSpanElement>('#name span')!.forEach((span, index) => {
+        setTimeout(() => {
+          span.style.color = 'var(--theme-color)';
+        }, index * 80);
+        document.querySelector<HTMLElement>('#name')?.classList.add('draw');
       });
 
       dot.style.transition = 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease-out';
