@@ -77,5 +77,16 @@ nav {
 
   & #intro {
     position: relative;
+
+    & #name {
+      opacity: 1;
+
+      span {
+        color: inherit;
+        transition:
+          opacity 1s ease,
+          color 0.3s ease;
+      }
+    }
   }
 }

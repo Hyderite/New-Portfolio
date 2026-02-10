@@ -3,7 +3,7 @@ const animation = {
   strokes: Array.from(document.querySelectorAll<SVGElement>('#onload .st0, #onload .st2, #onload .st3'))!,
   text: {
     hello: Array.from(document.querySelectorAll<HTMLSpanElement>('#onload #hello span'))!,
-    intro: Array.from(document.querySelectorAll<HTMLSpanElement>('#onload #intro span:not(#dot)'))!,
+    intro: Array.from(document.querySelectorAll<HTMLSpanElement>('#onload #intro span:not(#dot, #name)'))!,
   },
 };
 
@@ -20,9 +20,16 @@ window.addEventListener('load', async () => {
 
   const skip = () => {
     if (animation.text.intro) {
-      animation.text.intro.forEach((span) => (span.style.opacity = '1'));
+      animation.text.intro.forEach((span) => {
+        span.style.transition = 'none';
+        span.offsetHeight;
+        span.style.opacity = '1';
+      });
     }
     if (dot) {
+      document
+        .querySelectorAll<HTMLSpanElement>('#name span')!
+        .forEach((span) => (span.style.color = 'var(--theme-color)'));
       dot.style.opacity = '1';
       dot.style.transform = `translateX(0px)`;
     }
@@ -94,6 +101,10 @@ window.addEventListener('load', async () => {
       dot.style.opacity = '0';
 
       dot.offsetHeight;
+
+      document.querySelectorAll<HTMLSpanElement>('#name span')!.forEach((span) => {
+        span.style.color = 'var(--theme-color)';
+      });
 
       dot.style.transition = 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease-out';
       dot.style.transform = `translateX(0px)`;
