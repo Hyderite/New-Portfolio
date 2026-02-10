@@ -21,7 +21,7 @@ nav {
   & #logo {
     display: none;
     position: absolute;
-    width: 20vh;
+    width: clamp(60px, 20vh, 70px);
     opacity: 0;
     transition:
       transform 1s ease,
