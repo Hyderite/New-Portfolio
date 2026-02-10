@@ -27,6 +27,11 @@ window.addEventListener('load', async () => {
       dot.style.transform = `translateX(0px)`;
     }
     navbar.style.transform = 'translateY(0)';
+    setTimeout(() => {
+      if ((window as any).updateRects) {
+        (window as any).updateRects();
+      }
+    }, 500);
     animation.logo.style.display = 'none';
   };
 
@@ -77,7 +82,7 @@ window.addEventListener('load', async () => {
 
       await sleep(animation.text.intro.length * 50 + 400);
 
-      document.querySelector<HTMLElement>('nav')!.style.transform = 'translateY(0)';
+      navbar.style.transform = 'translateY(0)';
       setTimeout(() => {
         if ((window as any).updateRects) {
           (window as any).updateRects();
