@@ -84,9 +84,9 @@ window.addEventListener('mousemove', (e) => {
   state.mouse.y = e.clientY;
 });
 
-function updateRects() {
+(window as any).updateRects = function updateRects() {
   state.linkRects = Array.from(ui.links).map((link) => link.getBoundingClientRect());
-}
+};
 
 function update() {
   const navHovered = ui.navList.matches(':hover');
@@ -173,7 +173,7 @@ function update() {
   requestAnimationFrame(update);
 }
 
-window.addEventListener('resize', updateRects);
+window.addEventListener('resize', (window as any).updateRects);
 
 update();
 
