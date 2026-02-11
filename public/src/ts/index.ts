@@ -86,8 +86,10 @@ const insertBg = () => {
   }
 };
 
+let timeout: number;
 window.addEventListener('resize', () => {
-  insertBg();
+  clearTimeout(timeout);
+  timeout = window.setTimeout(insertBg, 250);
 });
 
 insertBg();
