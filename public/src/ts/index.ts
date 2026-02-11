@@ -192,6 +192,8 @@ window.addEventListener('load', async () => {
       dot.style.transform = `translateX(0px)`;
       dot.style.opacity = '1';
 
+      document.querySelector<HTMLElement>('#bg')!.style.opacity = '1';
+
       for (const span of Array.from(document.querySelectorAll<HTMLSpanElement>('#name span'))) {
         document.querySelector<HTMLElement>('#name')?.classList.add('draw');
         await sleep(80);
