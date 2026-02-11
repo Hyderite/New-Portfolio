@@ -18,7 +18,7 @@ window.addEventListener('load', async () => {
 
   const visited = sessionStorage.getItem('visited');
 
-  const skip = () => {
+  const skip = async () => {
     if (animation.text.intro) {
       animation.text.intro.forEach((span) => {
         span.style.transition = 'color 0.3s ease';
@@ -27,20 +27,22 @@ window.addEventListener('load', async () => {
       });
     }
     if (dot) {
-      document.querySelectorAll<HTMLSpanElement>('#name span')!.forEach((span, index) => {
-        setTimeout(() => (span.style.color = 'var(--theme-color)'), index * 80);
-      });
       document.querySelector<HTMLElement>('#name')?.classList.add('draw');
       dot.style.opacity = '1';
       dot.style.transform = `translateX(0px)`;
-    }
-    navbar.style.transform = 'translateY(0)';
-    setTimeout(() => {
-      if ((window as any).updateRects) {
-        (window as any).updateRects();
+      navbar.style.transform = 'translateY(0)';
+      animation.logo.style.display = 'none';
+      for (const span of Array.from(document.querySelectorAll<HTMLSpanElement>('#name span'))) {
+        span.style.color = 'var(--theme-color)';
+        await sleep(80);
       }
-    }, 500);
-    animation.logo.style.display = 'none';
+    }
+
+    await sleep(500);
+
+    if ((window as any).updateRects) {
+      (window as any).updateRects();
+    }
   };
 
   if (visited) {
@@ -57,45 +59,35 @@ window.addEventListener('load', async () => {
 
       animation.logo.classList.add('animate');
 
-      await sleep(1500);
+      await sleep(1250);
 
       animation.strokes.forEach((stroke) => (stroke.style.strokeWidth = '0px'));
 
       await sleep(500);
 
       animation.logo.style.display = 'none';
-      animation.text.hello.forEach((span, index) => {
+      for (const span of animation.text.hello) {
+        span.style.opacity = '1';
+        await sleep(50);
+      }
+
+      await sleep(800);
+
+      for (const span of animation.text.hello) {
         span.style.opacity = '0';
-        setTimeout(() => {
-          span.style.opacity = '1';
-        }, index * 100);
-      });
+        await sleep(80);
+      }
 
-      await sleep(1000);
+      await sleep(500);
 
-      animation.text.hello.forEach((span, index) => {
-        setTimeout(() => {
-          span.style.opacity = '0';
-        }, index * 100);
-      });
+      for (const span of animation.text.intro) {
+        span.style.opacity = '1';
+        await sleep(50);
+      }
 
-      await sleep(1500);
-
-      animation.text.intro.forEach((span, index) => {
-        span.style.opacity = '0';
-        setTimeout(() => {
-          span.style.opacity = '1';
-        }, index * 50);
-      });
-
-      await sleep(animation.text.intro.length * 50 + 400);
+      await sleep(animation.text.intro.length * 50);
 
       navbar.style.transform = 'translateY(0)';
-      setTimeout(() => {
-        if ((window as any).updateRects) {
-          (window as any).updateRects();
-        }
-      }, 500);
 
       dot.style.transition = 'none';
       dot.style.transform = `translateX(-50%)`;
@@ -103,16 +95,21 @@ window.addEventListener('load', async () => {
 
       dot.offsetHeight;
 
-      document.querySelectorAll<HTMLSpanElement>('#name span')!.forEach((span, index) => {
-        setTimeout(() => {
-          span.style.color = 'var(--theme-color)';
-        }, index * 80);
-        document.querySelector<HTMLElement>('#name')?.classList.add('draw');
-      });
-
       dot.style.transition = 'transform 0.7s cubic-bezier(0.22, 1, 0.36, 1), opacity 0.4s ease-out';
       dot.style.transform = `translateX(0px)`;
       dot.style.opacity = '1';
+
+      for (const span of Array.from(document.querySelectorAll<HTMLSpanElement>('#name span'))) {
+        document.querySelector<HTMLElement>('#name')?.classList.add('draw');
+        await sleep(80);
+        span.style.color = 'var(--theme-color)';
+      }
+
+      await sleep(500);
+
+      if ((window as any).updateRects) {
+        (window as any).updateRects();
+      }
     }
   }
 });
