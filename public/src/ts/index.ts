@@ -9,8 +9,6 @@ const animation = {
 
 const navbar = document.querySelector<HTMLElement>('nav')!;
 
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
-
 window.addEventListener('load', async () => {
   if (!animation) return;
 
