@@ -1,3 +1,5 @@
+// background image marquee
+
 const bgImages = [
   'hk_taipo_lake_house.webp',
   'hk_temple.webp',
@@ -93,6 +95,8 @@ window.addEventListener('resize', () => {
 });
 
 insertBg();
+
+// on load animation
 
 const animation = {
   logo: document.querySelector<SVGElement>('#onload #logo')!,
