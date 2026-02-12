@@ -113,10 +113,10 @@ nav {
 #bg {
   position: fixed;
   top: 70px;
-  bottom: 20px;
+  bottom: 0;
   left: 0;
   width: 100vw;
-  height: calc(100vh - 90px);
+  height: calc(100vh - 70px);
   overflow: hidden;
   z-index: -10;
   display: flex;
@@ -142,7 +142,7 @@ nav {
   height: calc(100% - 20px);
   width: auto;
   object-fit: cover;
-  margin: 20px;
+  margin: 0 20px 20px 0;
   border-radius: 15px;
 }
 
