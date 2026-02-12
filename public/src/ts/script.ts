@@ -29,7 +29,7 @@ const ui: ui = {
 const state = {
   scroll: {
     yPosition: window.scrollY || document.documentElement.scrollTop,
-    direction: null as 'up' | 'down' | null,
+    direction: sessionStorage.getItem('direction') as 'up' | 'down' | null,
   },
   navbar: {
     fading: false,
@@ -178,13 +178,14 @@ window.addEventListener('resize', (window as any).updateRects);
 update();
 
 // dynamically sized navbar
+
 async function expandNavbar() {
   ui.navList.style.opacity = '0';
   ui.nav.style.height = '70px';
   ui.logo.style.width = '45px';
   ui.menuBtn.style.width = '45px';
 
-  await sleep(150);
+  await sleep(300);
 
   ui.indicator.style.borderRadius = '8px';
   ui.navList.style.gap = '20px';
@@ -194,8 +195,15 @@ async function expandNavbar() {
     a.title = '';
     a.style.padding = '5px 10px';
   });
+
+  await sleep(50);
+
   ui.navList.style.opacity = '1';
   state.navbar.fading = false;
+
+  requestAnimationFrame(() => {
+    (window as any).updateRects();
+  });
 }
 
 async function shrinkNavbar() {
@@ -204,18 +212,26 @@ async function shrinkNavbar() {
   ui.logo.style.width = '30px';
   ui.menuBtn.style.width = '30px';
 
-  await sleep(150);
+  await sleep(300);
 
   ui.indicator.style.borderRadius = '100%';
   ui.navList.style.gap = '10px';
+
   ui.links.forEach((a, n) => {
     a.classList.add('material-symbols-outlined');
     a.innerText = state.content.icons[n];
     a.title = state.content.items[n];
     a.style.padding = '5px';
   });
+
+  await sleep(50);
+
   ui.navList.style.opacity = '1';
   state.navbar.fading = false;
+
+  requestAnimationFrame(() => {
+    (window as any).updateRects();
+  });
 }
 
 window.addEventListener('scroll', () => {
@@ -228,10 +244,12 @@ window.addEventListener('scroll', () => {
   if (currentDirection === 'down' && state.navbar.clicked) {
     state.navbar.fading = true;
     state.navbar.clicked = false;
+    sessionStorage.setItem('direction', 'down');
     state.scroll.direction = 'down';
     shrinkNavbar();
   } else if (currentDirection !== state.scroll.direction) {
     state.navbar.fading = true;
+    sessionStorage.setItem('direction', currentDirection);
     state.scroll.direction = currentDirection;
 
     if (state.scroll.direction === 'down') {
@@ -259,6 +277,22 @@ ui.nav.addEventListener('click', () => {
     state.navbar.fading = false;
   }
 });
+
+async function updateNavbarState() {
+  if (sessionStorage.getItem('direction') === 'down') {
+    await sleep(300);
+    requestAnimationFrame(() => {
+      (window as any).updateRects();
+    });
+    shrinkNavbar();
+  }
+
+  requestAnimationFrame(() => {
+    (window as any).updateRects();
+  });
+}
+
+updateNavbarState();
 
 // mobile menu logic
 ui.menuBtn.addEventListener('click', async () => {
