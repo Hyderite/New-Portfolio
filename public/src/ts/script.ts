@@ -237,6 +237,7 @@ async function shrinkNavbar() {
 window.addEventListener('scroll', () => {
   const currentYPosition = window.scrollY || document.documentElement.scrollTop;
   if (state.navbar.fading) return;
+  if (ui.nav.classList.contains('no-shrink')) return;
   if (Math.abs(currentYPosition - state.scroll.yPosition) < 5) return;
 
   let currentDirection: 'up' | 'down' = currentYPosition > state.scroll.yPosition ? 'down' : 'up';
@@ -271,7 +272,7 @@ window.addEventListener('scroll', () => {
 });
 
 ui.nav.addEventListener('click', () => {
-  if (ui.nav.style.height === '45px' && state.scroll.direction === 'down') {
+  if (ui.nav.style.height === '45px' && state.scroll.direction === 'down' && !ui.nav.classList.contains('no-shrink')) {
     expandNavbar();
     state.navbar.clicked = true;
     state.navbar.fading = false;
