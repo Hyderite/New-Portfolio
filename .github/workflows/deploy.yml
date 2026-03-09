@@ -1,4 +1,4 @@
-name: Deploy App
+name: Deploy Static Site
 on:
   push:
     branches: [ main ]
@@ -22,16 +22,30 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
+          # Use Service Tokens to bypass the Cloudflare Access login
           cat <<EOF > ~/.ssh/config
           Host ${{ secrets.SSH_HOST }}
-            ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h
+            ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h --service-token-id ${{ secrets.CF_CLIENT_ID }} --service-token-secret ${{ secrets.CF_CLIENT_SECRET }}
           EOF
 
-          ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          # Sync the static files to the VPS
+          rsync -e "ssh -o StrictHostKeyChecking=no" -avz --delete --exclude '.git' . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/${{ github.event.repository.name }}
+
+          # Build and Serve on the VPS
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
             cd /var/www/${{ github.event.repository.name }}
             
-            git pull origin main
+            # 1. Run the build (If using Vite/Astro/Tailwind)
+            # If it's just plain HTML, you can skip these two lines:
+            pnpm install
+            pnpm build
+
+            # 2. Tell PM2 to serve the folder
+            # Replace 'dist' with your build folder (e.g., 'build', 'out', or '.' for root)
+            # Change '8080' to whatever port you want this site to live on
+            /usr/bin/pm2 delete ${{ github.event.repository.name }} || true
+            /usr/bin/pm2 serve dist 8080 --name ${{ github.event.repository.name }} --spa
             
-            sudo nixpacks build . --name ${{ github.event.repository.name }}
-            sudo pm2 restart ${{ github.event.repository.name }} || sudo pm2 start "nixpacks run ." --name ${{ github.event.repository.name }}
+            # 3. Save the process
+            /usr/bin/pm2 save
           EOF
