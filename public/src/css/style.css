@@ -5,7 +5,7 @@ body {
   font-family: 'DM Sans', 'UoqMunThenKhung', sans-serif;
   margin: 0;
   padding: 0;
-  background: var(--background-color);
+  background: #fff;
   color: var(--text-color);
   overflow-x: hidden;
 }

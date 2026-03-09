@@ -1,5 +1,5 @@
 // background image marquee
-
+alert('ci/cd testing');
 const bgImages = [
   'hk_taipo_lake_house.webp',
   'hk_temple.webp',
