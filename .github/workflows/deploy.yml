@@ -1,7 +1,7 @@
 name: Deploy Static Site
 on:
   push:
-    branches: [ main ]
+    branches: [ master ]
 
 jobs:
   deploy:
@@ -10,42 +10,44 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Install Cloudflared on Runner
+      - name: Install pnpm
+        uses: pnpm/action-setup@v3
+        with:
+          version: 8 # or your specific version
+
+      - name: Install & Build
+        run: |
+          pnpm install
+          pnpm build
+
+      - name: Install Cloudflared
         run: |
           curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
           chmod +x cloudflared
           sudo mv cloudflared /usr/local/bin/
 
       - name: Deploy via Cloudflare Tunnel
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
         run: |
           mkdir -p ~/.ssh
-          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
+          echo "$SSH_KEY" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
-          # Use Service Tokens to bypass the Cloudflare Access login
+          # Setup the Tunnel SSH Config
           cat <<EOF > ~/.ssh/config
           Host ${{ secrets.SSH_HOST }}
             ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h --service-token-id ${{ secrets.CF_CLIENT_ID }} --service-token-secret ${{ secrets.CF_CLIENT_SECRET }}
+            StrictHostKeyChecking no
           EOF
 
-          # Sync the static files to the VPS
-          rsync -e "ssh -o StrictHostKeyChecking=no" -avz --delete --exclude '.git' . ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/${{ github.event.repository.name }}
+          # Sync ONLY the built files to the Nginx root we fixed
+          # Note: Changed from '.' to './public/' (or './dist/') to avoid uploading node_modules
+          rsync -avz --delete ./public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/portfolio-v4/public/
 
-          # Build and Serve on the VPS
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
-            cd /var/www/${{ github.event.repository.name }}
-            
-            # 1. Run the build (If using Vite/Astro/Tailwind)
-            # If it's just plain HTML, you can skip these two lines:
-            pnpm install
-            pnpm build
-
-            # 2. Tell PM2 to serve the folder
-            # Replace 'dist' with your build folder (e.g., 'build', 'out', or '.' for root)
-            # Change '8080' to whatever port you want this site to live on
-            /usr/bin/pm2 delete ${{ github.event.repository.name }} || true
-            /usr/bin/pm2 serve dist 8080 --name ${{ github.event.repository.name }} --spa
-            
-            # 3. Save the process
-            /usr/bin/pm2 save
-          EOF
+      - name: Purge Cloudflare Cache
+        run: |
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
+          -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
+          -H "Content-Type: application/json" \
+          --data '{"hosts":["new.hyderite.dev"]}'
