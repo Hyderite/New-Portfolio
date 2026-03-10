@@ -1,53 +1,64 @@
-name: Deploy Static Site
+name: Static site deployment
+
 on:
   push:
-    branches: [ master ]
+    branches:
+      - main
+      - master
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout Code
+      - name: Checkout
         uses: actions/checkout@v4
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v3
-        with:
-          version: 8 # or your specific version
+        uses: pnpm/action-setup@v4
 
-      - name: Install & Build
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: 'pnpm'
+
+      - name: Install dependencies
         run: |
           pnpm install
+
+      - name: Build
+        run: |
           pnpm build
 
-      - name: Install Cloudflared
+      - name: Install cloudflared
         run: |
-          curl -L https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64 -o cloudflared
-          chmod +x cloudflared
-          sudo mv cloudflared /usr/local/bin/
+          curl -L --output cloudflared.deb https://github.com/cloudflare/cloudflared/releases/latest/download/cloudflared-linux-amd64.deb
+          sudo dpkg -i cloudflared.deb
 
-      - name: Deploy via Cloudflare Tunnel
+      - name: Deploy
         env:
-          SSH_KEY: ${{ secrets.SSH_KEY }}
+          CF_CLIENT_ID: ${{ secrets.CF_CLIENT_ID }}
+          CF_CLIENT_SECRET: ${{ secrets.CF_CLIENT_SECRET }}
         run: |
           mkdir -p ~/.ssh
-          echo "$SSH_KEY" > ~/.ssh/id_ed25519
+          echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
 
-          # Setup the Tunnel SSH Config
           cat <<EOF > ~/.ssh/config
-          Host ${{ secrets.SSH_HOST }}
-            ProxyCommand /usr/local/bin/cloudflared access ssh --hostname %h --service-token-id ${{ secrets.CF_CLIENT_ID }} --service-token-secret ${{ secrets.CF_CLIENT_SECRET }}
-            StrictHostKeyChecking no
+          Host vps
+          HostName ${{ secrets.SSH_HOST }}
+          User ${{ secrets.SSH_USER }}
+          IdentityFile ~/.ssh/id_ed25519
+          ProxyCommand cloudflared access ssh --id ${{ secrets.CF_CLIENT_ID }} --secret ${{ secrets.CF_CLIENT_SECRET }} --hostname %h
+          StrictHostKeyChecking no
           EOF
 
-          # Sync ONLY the built files to the Nginx root we fixed
-          # Note: Changed from '.' to './public/' (or './dist/') to avoid uploading node_modules
-          rsync -avz --delete ./public/ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:/var/www/portfolio-v4/public/
+          ssh vps "mkdir -p /var/www/${{ github.event.repository.name }}/"
 
-      - name: Purge Cloudflare Cache
-        run: |
-          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
-          -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
-          -H "Content-Type: application/json" \
-          --data '{"hosts":["new.hyderite.dev"]}'
+          rsync -avz --delete \
+            --exclude 'node_modules' \
+            --exclude 'src' \
+            --exclude '.git' \
+            --exclude '.github' \
+            --exclude '.env' \
+            -e ssh ./ vps:/var/www/${{ github.event.repository.name }}/
